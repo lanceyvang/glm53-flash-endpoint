@@ -28,6 +28,8 @@ class EndpointContractTest(unittest.TestCase):
         )
         self.assertEqual(config["container"]["port"], 8000)
         self.assertEqual(config["container"]["health_route"], "/health")
+        self.assertEqual(config["container"]["args"][0], "/repository")
+        self.assertNotIn("--revision=378ca54585c46542bad1f3cb3ed0d73ae51cdb62", config["container"]["args"])
         self.assertIn("--tensor-parallel-size=4", config["container"]["args"])
         self.assertIn("--max-model-len=32768", config["container"]["args"])
         self.assertEqual(config["scaling"], {"min_replica": 0, "max_replica": 1, "scale_to_zero_timeout": 15})

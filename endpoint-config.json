@@ -16,8 +16,7 @@
     "port": 8000,
     "health_route": "/health",
     "args": [
-      "local-inference-lab/GLM-5.3-Flash-NVFP4",
-      "--revision=378ca54585c46542bad1f3cb3ed0d73ae51cdb62",
+      "/repository",
       "--served-model-name=local-inference-lab/GLM-5.3-Flash-NVFP4",
       "--tensor-parallel-size=4",
       "--max-model-len=32768",

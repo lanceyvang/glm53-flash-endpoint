@@ -36,7 +36,7 @@ jobs:
             /usr/share/dotnet \
             /opt/ghc \
             /usr/local/.ghcup \
-            /opt/hostedtoolcache/CodeQL
+            /opt/hostedtoolcache
           sudo docker image prune --all --force
           df -h /
       - uses: actions/checkout@v4
@@ -44,7 +44,7 @@ jobs:
         with:
           repository: local-inference-lab/vllm
           ref: ${{ env.VLLM_COMMIT }}
-          fetch-depth: 0
+          fetch-depth: 1
           persist-credentials: false
           path: vllm
       - name: Remove the unsupported Hopper-only FA3 build
@@ -72,8 +72,6 @@ jobs:
             torch_cuda_arch_list=12.0
             max_jobs=2
             nvcc_threads=2
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
       - name: Make the endpoint image public
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

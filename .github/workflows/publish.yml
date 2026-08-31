@@ -40,12 +40,15 @@ jobs:
           sudo docker image prune --all --force
           df -h /
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           repository: local-inference-lab/vllm
           ref: ${{ env.VLLM_COMMIT }}
           fetch-depth: 0
           persist-credentials: false
           path: vllm
+      - name: Remove the unsupported Hopper-only FA3 build
+        run: git -C vllm apply ../patches/blackwell-flash-attention.patch
       - uses: docker/setup-buildx-action@v3
       - uses: docker/login-action@v3
         with:

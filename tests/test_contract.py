@@ -39,6 +39,9 @@ class EndpointContractTest(unittest.TestCase):
         workflow = (ROOT / ".github/workflows/publish.yml").read_text()
 
         self.assertIn("0b67266a0f37d6146a8403fb8482403c62f412d5", workflow)
+        self.assertIn("repository: local-inference-lab/vllm", workflow)
+        self.assertIn("fetch-depth: 0", workflow)
+        self.assertIn("context: ./vllm", workflow)
         self.assertIn("target: vllm-openai", workflow)
         self.assertIn("torch_cuda_arch_list=12.0", workflow)
         self.assertIn("platforms: linux/amd64", workflow)

@@ -1,0 +1,36 @@
+{
+  "name": "glm-5-3-flash-nvfp4",
+  "namespace": "lanceyvang",
+  "model": {
+    "repository": "local-inference-lab/GLM-5.3-Flash-NVFP4",
+    "revision": "378ca54585c46542bad1f3cb3ed0d73ae51cdb62"
+  },
+  "compute": {
+    "provider": "aws",
+    "region": "us-east-2",
+    "instance_type": "nvidia-rtx-pro-6000",
+    "instance_size": "x4"
+  },
+  "container": {
+    "image": "ghcr.io/lanceyvang/glm53-flash-endpoint:0b67266a0f37d6146a8403fb8482403c62f412d5",
+    "port": 8000,
+    "health_route": "/health",
+    "args": [
+      "local-inference-lab/GLM-5.3-Flash-NVFP4",
+      "--revision=378ca54585c46542bad1f3cb3ed0d73ae51cdb62",
+      "--served-model-name=local-inference-lab/GLM-5.3-Flash-NVFP4",
+      "--tensor-parallel-size=4",
+      "--max-model-len=32768",
+      "--gpu-memory-utilization=0.92",
+      "--host=0.0.0.0",
+      "--port=8000"
+    ]
+  },
+  "task": "custom",
+  "authentication": "private",
+  "scaling": {
+    "min_replica": 0,
+    "max_replica": 1,
+    "scale_to_zero_timeout": 15
+  }
+}

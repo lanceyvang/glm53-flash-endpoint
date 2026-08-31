@@ -50,6 +50,11 @@ class EndpointContractTest(unittest.TestCase):
         self.assertIn("torch_cuda_arch_list=12.0", workflow)
         self.assertIn("patches/blackwell-flash-attention.patch", workflow)
         self.assertIn("set(FA3_ENABLED OFF)", blackwell_patch)
+        self.assertIn("--- a/setup.py", blackwell_patch)
+        self.assertIn(
+            '-        ext_modules.append(CMakeExtension(name="vllm.vllm_flash_attn._vllm_fa3_C"))',
+            blackwell_patch,
+        )
         self.assertIn("platforms: linux/amd64", workflow)
         self.assertIn("ghcr.io/lanceyvang/glm53-flash-endpoint", workflow)
 

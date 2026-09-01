@@ -11,7 +11,8 @@ permissions:
 
 env:
   VLLM_COMMIT: 0b67266a0f37d6146a8403fb8482403c62f412d5
-  B12X_VERSION: 1.3.0
+  B12X_COMMIT: 12aea7d96928f540a64259e4e24ef7688093b515
+  B12X_TAG: 12aea7d
   IMAGE: ghcr.io/lanceyvang/glm53-flash-endpoint
 
 jobs:
@@ -43,10 +44,10 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ${{ env.IMAGE }}:${{ env.VLLM_COMMIT }}-b12x-${{ env.B12X_VERSION }}
+            ${{ env.IMAGE }}:${{ env.VLLM_COMMIT }}-b12x-${{ env.B12X_TAG }}
             ${{ env.IMAGE }}:latest
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.revision=${{ env.VLLM_COMMIT }}
           build-args: |
-            B12X_VERSION=${{ env.B12X_VERSION }}
+            B12X_COMMIT=${{ env.B12X_COMMIT }}

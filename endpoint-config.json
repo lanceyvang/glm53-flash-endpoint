@@ -22,6 +22,7 @@
       "--max-model-len=32768",
       "--block-size=256",
       "--attention-backend=B12X",
+      "--enforce-eager",
       "--gpu-memory-utilization=0.92",
       "--host=0.0.0.0",
       "--port=8000"

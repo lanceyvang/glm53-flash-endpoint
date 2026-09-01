@@ -38,6 +38,7 @@ class EndpointContractTest(unittest.TestCase):
         self.assertIn("--max-model-len=32768", config["container"]["args"])
         self.assertIn("--block-size=256", config["container"]["args"])
         self.assertIn("--attention-backend=B12X", config["container"]["args"])
+        self.assertIn("--enforce-eager", config["container"]["args"])
         self.assertEqual(config["scaling"], {"min_replica": 0, "max_replica": 1, "scale_to_zero_timeout": 15})
         self.assertEqual(config["authentication"], "private")
 

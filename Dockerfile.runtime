@@ -1,6 +1,6 @@
 FROM ghcr.io/lanceyvang/glm53-flash-endpoint:0b67266a0f37d6146a8403fb8482403c62f412d5
 
-ARG B12X_COMMIT="12aea7d96928f540a64259e4e24ef7688093b515"
+ARG B12X_COMMIT="b1d541f9e71a35f030d45fae437630fff7507c2a"
 
 RUN python3 -m pip install --no-cache-dir \
     "https://github.com/local-inference-lab/b12x/archive/${B12X_COMMIT}.tar.gz"

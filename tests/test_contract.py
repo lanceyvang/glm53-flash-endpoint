@@ -30,7 +30,7 @@ class EndpointContractTest(unittest.TestCase):
         self.assertEqual(config["container"]["health_route"], "/health")
         self.assertEqual(
             config["container"]["image"],
-            "ghcr.io/lanceyvang/glm53-flash-endpoint:0b67266a0f37d6146a8403fb8482403c62f412d5-b12x-12aea7d",
+            "ghcr.io/lanceyvang/glm53-flash-endpoint:0b67266a0f37d6146a8403fb8482403c62f412d5-b12x-b1d541f",
         )
         self.assertEqual(config["container"]["args"][0], "/repository")
         self.assertNotIn("--revision=378ca54585c46542bad1f3cb3ed0d73ae51cdb62", config["container"]["args"])
@@ -46,8 +46,8 @@ class EndpointContractTest(unittest.TestCase):
         dockerfile = (ROOT / "Dockerfile.runtime").read_text()
 
         self.assertIn("0b67266a0f37d6146a8403fb8482403c62f412d5", workflow)
-        self.assertIn("B12X_COMMIT: 12aea7d96928f540a64259e4e24ef7688093b515", workflow)
-        self.assertIn("B12X_TAG: 12aea7d", workflow)
+        self.assertIn("B12X_COMMIT: b1d541f9e71a35f030d45fae437630fff7507c2a", workflow)
+        self.assertIn("B12X_TAG: b1d541f", workflow)
         self.assertIn("context: .", workflow)
         self.assertIn("file: ./Dockerfile.runtime", workflow)
         self.assertNotIn("cache-to: type=gha", workflow)
@@ -58,7 +58,7 @@ class EndpointContractTest(unittest.TestCase):
             dockerfile,
         )
         self.assertIn(
-            'ARG B12X_COMMIT="12aea7d96928f540a64259e4e24ef7688093b515"',
+            'ARG B12X_COMMIT="b1d541f9e71a35f030d45fae437630fff7507c2a"',
             dockerfile,
         )
         self.assertIn("b12x/archive/${B12X_COMMIT}.tar.gz", dockerfile)

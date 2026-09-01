@@ -11,8 +11,8 @@ permissions:
 
 env:
   VLLM_COMMIT: 0b67266a0f37d6146a8403fb8482403c62f412d5
-  B12X_COMMIT: 12aea7d96928f540a64259e4e24ef7688093b515
-  B12X_TAG: 12aea7d
+  B12X_COMMIT: b1d541f9e71a35f030d45fae437630fff7507c2a
+  B12X_TAG: b1d541f
   IMAGE: ghcr.io/lanceyvang/glm53-flash-endpoint
 
 jobs:

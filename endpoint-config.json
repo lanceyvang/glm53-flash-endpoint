@@ -12,7 +12,7 @@
     "instance_size": "x4"
   },
   "container": {
-    "image": "ghcr.io/lanceyvang/glm53-flash-endpoint:0b67266a0f37d6146a8403fb8482403c62f412d5-b12x-12aea7d",
+    "image": "ghcr.io/lanceyvang/glm53-flash-endpoint:0b67266a0f37d6146a8403fb8482403c62f412d5-b12x-b1d541f",
     "port": 8000,
     "health_route": "/health",
     "args": [

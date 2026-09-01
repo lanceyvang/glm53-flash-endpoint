@@ -1,0 +1,5 @@
+FROM ghcr.io/lanceyvang/glm53-flash-endpoint:0b67266a0f37d6146a8403fb8482403c62f412d5
+
+ARG B12X_VERSION="1.3.0"
+
+RUN python3 -m pip install --no-cache-dir "b12x==${B12X_VERSION}"

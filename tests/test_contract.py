@@ -28,36 +28,35 @@ class EndpointContractTest(unittest.TestCase):
         )
         self.assertEqual(config["container"]["port"], 8000)
         self.assertEqual(config["container"]["health_route"], "/health")
+        self.assertEqual(
+            config["container"]["image"],
+            "ghcr.io/lanceyvang/glm53-flash-endpoint:0b67266a0f37d6146a8403fb8482403c62f412d5-b12x-1.3.0",
+        )
         self.assertEqual(config["container"]["args"][0], "/repository")
         self.assertNotIn("--revision=378ca54585c46542bad1f3cb3ed0d73ae51cdb62", config["container"]["args"])
         self.assertIn("--tensor-parallel-size=4", config["container"]["args"])
         self.assertIn("--max-model-len=32768", config["container"]["args"])
+        self.assertIn("--block-size=256", config["container"]["args"])
         self.assertEqual(config["scaling"], {"min_replica": 0, "max_replica": 1, "scale_to_zero_timeout": 15})
         self.assertEqual(config["authentication"], "private")
 
-    def test_publish_workflow_builds_the_pinned_blackwell_target(self):
+    def test_publish_workflow_layers_the_pinned_b12x_runtime(self):
         workflow = (ROOT / ".github/workflows/publish.yml").read_text()
-        blackwell_patch = (ROOT / "patches/blackwell-flash-attention.patch").read_text()
+        dockerfile = (ROOT / "Dockerfile.runtime").read_text()
 
         self.assertIn("0b67266a0f37d6146a8403fb8482403c62f412d5", workflow)
-        self.assertIn("repository: local-inference-lab/vllm", workflow)
-        self.assertIn("fetch-depth: 1", workflow)
-        self.assertIn("context: ./vllm", workflow)
-        self.assertIn("name: Free runner disk for the CUDA build", workflow)
-        self.assertIn("/usr/local/lib/android", workflow)
-        self.assertIn("/opt/hostedtoolcache", workflow)
+        self.assertIn("B12X_VERSION: 1.3.0", workflow)
+        self.assertIn("context: .", workflow)
+        self.assertIn("file: ./Dockerfile.runtime", workflow)
         self.assertNotIn("cache-to: type=gha", workflow)
-        self.assertIn("target: vllm-openai", workflow)
-        self.assertIn("torch_cuda_arch_list=12.0", workflow)
-        self.assertIn("patches/blackwell-flash-attention.patch", workflow)
-        self.assertIn("set(FA3_ENABLED OFF)", blackwell_patch)
-        self.assertIn("--- a/setup.py", blackwell_patch)
-        self.assertIn(
-            '-        ext_modules.append(CMakeExtension(name="vllm.vllm_flash_attn._vllm_fa3_C"))',
-            blackwell_patch,
-        )
         self.assertIn("platforms: linux/amd64", workflow)
         self.assertIn("ghcr.io/lanceyvang/glm53-flash-endpoint", workflow)
+        self.assertIn(
+            "FROM ghcr.io/lanceyvang/glm53-flash-endpoint:0b67266a0f37d6146a8403fb8482403c62f412d5",
+            dockerfile,
+        )
+        self.assertIn('ARG B12X_VERSION="1.3.0"', dockerfile)
+        self.assertIn('"b12x==${B12X_VERSION}"', dockerfile)
 
 
 if __name__ == "__main__":

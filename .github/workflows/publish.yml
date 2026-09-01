@@ -11,6 +11,7 @@ permissions:
 
 env:
   VLLM_COMMIT: 0b67266a0f37d6146a8403fb8482403c62f412d5
+  B12X_VERSION: 1.3.0
   IMAGE: ghcr.io/lanceyvang/glm53-flash-endpoint
 
 jobs:
@@ -26,29 +27,9 @@ jobs:
   publish:
     needs: test
     runs-on: ubuntu-latest
-    timeout-minutes: 360
+    timeout-minutes: 60
     steps:
-      - name: Free runner disk for the CUDA build
-        run: |
-          df -h /
-          sudo rm -rf \
-            /usr/local/lib/android \
-            /usr/share/dotnet \
-            /opt/ghc \
-            /usr/local/.ghcup \
-            /opt/hostedtoolcache
-          sudo docker image prune --all --force
-          df -h /
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-        with:
-          repository: local-inference-lab/vllm
-          ref: ${{ env.VLLM_COMMIT }}
-          fetch-depth: 1
-          persist-credentials: false
-          path: vllm
-      - name: Remove the unsupported Hopper-only FA3 build
-        run: git -C vllm apply ../patches/blackwell-flash-attention.patch
       - uses: docker/setup-buildx-action@v3
       - uses: docker/login-action@v3
         with:
@@ -57,25 +38,15 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v6
         with:
-          context: ./vllm
-          file: ./vllm/docker/Dockerfile
-          target: vllm-openai
+          context: .
+          file: ./Dockerfile.runtime
           platforms: linux/amd64
           push: true
           tags: |
-            ${{ env.IMAGE }}:${{ env.VLLM_COMMIT }}
+            ${{ env.IMAGE }}:${{ env.VLLM_COMMIT }}-b12x-${{ env.B12X_VERSION }}
             ${{ env.IMAGE }}:latest
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.revision=${{ env.VLLM_COMMIT }}
           build-args: |
-            torch_cuda_arch_list=12.0
-            max_jobs=2
-            nvcc_threads=2
-      - name: Make the endpoint image public
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: >-
-          gh api --method PATCH
-          /user/packages/container/glm53-flash-endpoint
-          -f visibility=public
+            B12X_VERSION=${{ env.B12X_VERSION }}
